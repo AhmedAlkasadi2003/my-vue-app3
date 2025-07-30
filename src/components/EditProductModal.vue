@@ -67,7 +67,7 @@ watch(
   () => props.product,
   (val) => {
     if (val) {
-      Object.assign(edited, val); // نسخ بيانات المنتج
+      Object.assign(edited, val);
     }
   },
   { immediate: true }

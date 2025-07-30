@@ -8,13 +8,13 @@
     ]"
   >
     <div class="flex justify-between items-center">
-      <h2 class="text-xl font-semibold text-indigo-700 mt-[112px]">سلة المشتريات</h2>
+      <h2 class="text-xl font-semibold text-indigo-700 mt-[110px] lg:mt-[70px]">سلة المشتريات</h2>
       <button
         @click="$emit('toggle')"
         class="text-gray-500 hover:text-indigo-700 transition text-2xl"
         aria-label="إغلاق السلة"
       >
-        <i class="fas fa-times"></i>
+        <i class="fas fa-times  mt-[116px] lg:mt-[70px]"></i>
       </button>
     </div>
 

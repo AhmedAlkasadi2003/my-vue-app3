@@ -113,7 +113,7 @@ function increaseQuantity(id) {
     cart[id].quantity++;
   }
 }
-
+  
 function decreaseQuantity(id) {
   if (cart[id]) {
     if (cart[id].quantity > 1) {

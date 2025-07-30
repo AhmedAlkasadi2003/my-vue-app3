@@ -8,7 +8,7 @@
           @input="$emit('update:searchTerm', $event.target.value)"
           type="text"
           placeholder="ابحث عن منتج..."
-          class="flex-grow md:flex-grow-0 rounded-md px-1 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 lg:w-[500px]"
+          class="flex-grow md:flex-grow-0 rounded-md px-1 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-300 lg:w-[650px]"
         />
         <select
           :value="selectedCategory"

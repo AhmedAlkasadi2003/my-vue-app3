@@ -26,6 +26,8 @@
       @toggle="toggleCart"
       @remove-item="removeFromCart"
       @clear-cart="clearCart"
+      @increase-quantity="increaseQuantity"
+      @decrease-quantity="decreaseQuantity"
     />
 
     <EditProductModal
@@ -59,6 +61,7 @@ const cart = reactive({});
 const isCartOpen = ref(false);
 const editedProduct = ref(null);
 
+// تحميل الفئات
 async function loadCategories() {
   try {
     const res = await axios.get(categoryURL);
@@ -68,6 +71,7 @@ async function loadCategories() {
   }
 }
 
+// تحميل المنتجات
 async function loadProducts() {
   try {
     const res = await axios.get(apiURL);
@@ -77,6 +81,7 @@ async function loadProducts() {
   }
 }
 
+// فلترة المنتجات
 const filteredProducts = computed(() => {
   return products.value.filter((p) => {
     const matchCategory = selectedCategory.value ? p.category === selectedCategory.value : true;
@@ -85,28 +90,50 @@ const filteredProducts = computed(() => {
   });
 });
 
+// إضافة للسلة
 function addToCart(product) {
   if (cart[product.id]) {
     cart[product.id].quantity++;
   } else {
     cart[product.id] = { ...product, quantity: 1 };
   }
-  // تم حذف السطر التالي لمنع فتح السلة تلقائياً عند الإضافة
+  // تم حذف السطر التالي لمنع فتح السلة تلقائياً
   // isCartOpen.value = true;
 }
 
+// إزالة منتج من السلة
 function removeFromCart(id) {
   if (cart[id]) {
     delete cart[id];
   }
 }
 
+// حذف كل المنتجات من السلة
 function clearCart() {
   for (const key in cart) {
     delete cart[key];
   }
 }
 
+// زيادة الكمية
+function increaseQuantity(id) {
+  if (cart[id]) {
+    cart[id].quantity++;
+  }
+}
+
+// إنقاص الكمية
+function decreaseQuantity(id) {
+  if (cart[id]) {
+    if (cart[id].quantity > 1) {
+      cart[id].quantity--;
+    } else {
+      delete cart[id];
+    }
+  }
+}
+
+// حساب العناصر
 const cartItems = computed(() => Object.values(cart));
 const cartTotal = computed(() =>
   cartItems.value.reduce((total, item) => total + item.price * item.quantity, 0)
@@ -115,19 +142,23 @@ const totalItems = computed(() =>
   cartItems.value.reduce((sum, item) => sum + item.quantity, 0)
 );
 
+// تبديل السلة
 function toggleCart() {
   isCartOpen.value = !isCartOpen.value;
 }
 
+// حذف منتج
 function deleteProduct(id) {
   products.value = products.value.filter((p) => p.id !== id);
   if (cart[id]) removeFromCart(id);
 }
 
+// فتح نافذة تعديل منتج
 function openEdit(product) {
-  editedProduct.value = { ...product }; // نسخة مستقلة للتعديل
+  editedProduct.value = { ...product };
 }
 
+// حفظ المنتج المعدل
 function saveEditedProduct(updatedProduct) {
   const index = products.value.findIndex(p => p.id === updatedProduct.id);
   if (index !== -1) {
@@ -136,10 +167,12 @@ function saveEditedProduct(updatedProduct) {
   editedProduct.value = null;
 }
 
+// إلغاء التعديل
 function cancelEdit() {
   editedProduct.value = null;
 }
 
+// تحميل البيانات عند التشغيل
 onMounted(() => {
   loadCategories();
   loadProducts();
